@@ -1,0 +1,322 @@
+\documentclass[12pt, a4paper,oneside, openany]{book}
+%fuente12pt,tamaño carta,una cara,quitar hojas en blanco,tipo libro
+\usepackage[utf8]{inputenc} %fuente Unicode
+%\usepackage[margin=-0cm]{geometry} %margen
+\usepackage{graphicx} %uso de imagenes
+\usepackage{multicol} %uso de multicolumnas
+\usepackage{multirow} %multi celdas
+\usepackage{lastpage} %n.total de paginas
+\usepackage{colortbl} %columnas de color
+\usepackage{tikz, tikz-3dplot} %figuras
+\usepackage{tkz-euclide}
+\usepackage{adjustbox} %manejo de margenes
+\usepackage[spanish]{babel} %lenguaje español
+\usepackage[document]{ragged2e} %alineacion
+\usepackage[T1]{fontenc} %codificacion fuente
+\usepackage{palatino} %fuente
+\usepackage{enumerate} %viñeta numeros
+\usepackage[colorlinks,linkcolor=myblue,citecolor=mygreen]{hyperref} %link personalizado
+%-------------------------------------------------------------------
+\definecolor{myblue}{HTML}{2D74B5} %color de titulos y subtitulos
+%-------------------------------------------------------------------
+\graphicspath{ {img/} } %localizacion de carpeta con imagenes
+\renewcommand{\baselinestretch}{1.2} %espacio entre parrafos
+
+%\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
+%elimina paginas adicionales que se agregan con el uso de hyperref
+
+\usepackage{multirow} %multi celdas en tablas
+\usepackage{longtable} %tablas multipagina
+\usepackage{caption} %ajuste de tablas, figuras
+\usepackage{color} %colores de texto
+\usepackage{wrapfig} %rodear imagenes
+\usepackage{booktabs, multirow} %bordes y rangos
+\usepackage{titlesec} %titulos personalizados
+\usepackage{eso-pic,picture} %imagenes con texto
+\usepackage{nomencl} %simbolos de nomenclatura
+\usepackage{lipsum} %crea texto default
+\makenomenclature %tamaño nomenclatura
+%\usepackage{showframe} %muestra el margen de las pg
+%-------------------------------------------------------------------
+%codigo del borde
+\AddToShipoutPicture{%
+\setlength\fboxsep{1pt}%
+\put(24pt,24pt){\framebox(19.3066cm,28.0066cm)[lb]{}}%
+}
+
+%margenes
+\usepackage{geometry}
+\newgeometry{
+        top=0.001in,
+        bottom=3.2in,
+        outer=0.55in,  %izquierda
+        inner=0.55in, %derecha
+        }
+%-------------------------------------------------------------------
+\usepackage{fancyhdr}%uso de encabezado y pie personalizado
+\pagestyle{fancy}
+
+\setlength{\headheight}{160pt}%ubicacion de caja de encabezado
+
+\titlespacing{\chapter}{0pt}{-42pt}{0.5cm}%config capitulos, espacio de chapter
+\titleformat{\chapter}[display]
+{\sffamily\color{myblue}} {
+  {\normalfont\color{myblue}\Large}
+        \hspace{0pt}
+            {\setlength\fboxsep{0pt}
+                \colorbox{myblue}{
+                }
+            }
+    }
+  {0 pt}
+  {\titlerule[0pt]\LARGE\sffamily}
+
+%-------------------------------------------------------------------
+\fancyhf{}%Declaración de encabezado
+\pagestyle{fancy}
+\fancypagestyle{plain}{}
+%encabezado general
+\begin{document}%inicio de documento
+\lhead{
+
+\begin{minipage}{0.1\textwidth}
+\scalebox{1}[1.2]{
+\begin{tabular}{|m{2cm}|m{10.8cm}|m{1.0cm}|m{1.0cm}|m{1.0cm}| }
+
+\hline
+
+\multirow{3}{2cm}{\centering\includegraphics[width=1.0\textwidth]{tjacdmx_logo.png}}
+& \footnotesize\centering\bf\sffamily{TRIBUNAL DE JUSTICIA ADMINISTRATIVA DE TABASCO}
+& \footnotesize\bf\sffamily{Día}
+& \footnotesize\bf\sffamily{Mes}
+&\footnotesize\bf\sffamily{Año}
+\\ \cline{2-5}
+
+& \centering\bf\footnotesize\sffamily{DIRECCIÓN GENERAL DE ADMINISTRACIÓN}
+& \footnotesize\centering\bf\sffamily{28}
+& \footnotesize\centering\bf\sffamily{02}
+& \footnotesize\bf\sffamily{2023}
+\\ \cline{2-5}
+
+& \centering\bf\footnotesize\sffamily{DIRECCIÓN DE INFORMÁTICA}
+& \multicolumn{3}{ |c| }{\bf\footnotesize\sffamily{Versión: 001 }}
+\\ \cline{2-5}
+
+&
+\centering\bf\footnotesize\sffamily{MANUAL DE USUARIO}
+& \multicolumn{3}{ |c| } {\bf\footnotesize\sffamily{Página \thepage~de\ \pageref{LastPage}}}
+\\ \hline
+
+\end{tabular}}
+\end{minipage}
+
+}
+%-------------------------------------------------------------------
+
+\centerline{\includegraphics[width=0.8\textwidth]{tjacdmx_logo.png}}%imagen de logo en portada
+%titulo de portada
+
+\vspace{1cm}%espacio
+%-------------------------------------------------------------------
+\begin{flushright}%alineación a la derecha
+
+\newcommand{\ProjectTitle}
+
+\vspace{0cm}
+%titulo en portada
+{\color{myblue}{\sffamily\large\bf\sffamily
+ACTUARIA\\
+NOTIFICACIONES\\
+\vspace{0.3cm}
+MANUAL DE USUARIO\\
+\vspace{0.2cm}
+DIRECCIÓN DE INFORMÁTICA}
+}
+
+\end{flushright}
+%-------------------------------------------------------------------
+%pie de todas las paginas
+\cfoot[]{
+{
+\scalebox{1}[0.9]{%tamaño de celdas
+\centering\begin{tabular}{|m{4cm}|m{4.0cm}|m{4.0cm}|m{4.0cm}| }
+
+\hline
+
+\centering\sffamily IDENTIFICACIÓN
+& \centering\sffamily ELABORÓ
+&  \centering\sffamily REVISÓ
+& AUTORIZÓ
+\\
+\hline
+
+\centering\sffamily TJACDMX DI MANUAL USUARIO
+&  \centering\sffamily Dirección de Informática
+&  \centering\sffamily Dirección de Informática
+&  Pendiente de validación
+\\
+ \hline
+\end{tabular}}
+
+}}
+%-------------------------------------------------------------------
+
+
+\renewcommand{\headrulewidth}{0pt}%sin linea por default
+\begin{quote}%alineacion de texto
+
+\tableofcontents
+
+\chapter{\large{Objetivo del sistema de información}}\label{chap:objetivo}
+Con la finalidad de ofrecer a los servidores públicos del Tribunal de Justicia Administrativa de Tabasco
+una herramienta que facilite la operación de los apartados que integran el módulo
+de «Actuaría v 3.0», se elaboró el presente Manual.
+
+\chapter{\large{¿Cómo ingresar a Actuaría v3.0?}}\label{chap:ingreso}
+
+1.Ingresaremos al Sistema con el siguiente link:
+
+\begin{center}
+\href{https://sidj.tjacdmx.gob.mx}{https://sidj.tjacdmx.gob.mx}
+\end{center}
+
+2.Nos ubicaremos en el menú y daremos clic en  {\bf{
+<<Actuaria v3.0>> }}
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{inicioAc.png}
+\end{center}
+
+\chapter{\large{Notificaciones}}\label{chap:notificaciones}
+
+En este módulo de Notificaciones puedes realizar las siguientes acciones:
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{notificaciones.png}
+\end{center}
+\begin{enumerate}[(1)]
+    \item Búsqueda y consulta
+    \item Visualización de documento
+    \item Impresión
+    \item Descarga
+    \item Información del acuerdo
+    \item Notificaciones
+    \item Registrar notificación
+\end{enumerate}
+\newpage
+{\Huge{\color{myblue} \section{ ¿Cómo buscar una notificación?}\label{sec:0.1}}}
+
+ Para consultar una notificación debes ingresar número de juicio, folio o R.A en el campo de búsqueda indicado anteriormente con el número (1) y dar clic en el botón {\bf{<<Buscar>>}}\\
+
+Se mostrarán los resultados de la búsqueda.
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{resultados_mot.png}
+\end{center}
+
+{\Huge{\color{myblue} \section{ ¿Cómo visualizar el archivo del acuerdo?}\label{sec:0.2}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Visualizar>>}} indicado anteriormente con el número (2), automáticamente se mostrará el archivo.
+
+\begin{center}
+    \includegraphics[width=0.21\columnwidth]{archivo.png}
+\end{center}
+
+{\Huge{\color{myblue} \section{ ¿Cómo imprimir un acuerdo?}\label{sec:0.3}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Imprimir>>}} indicado anteriormente con el número (3), se mostrará la pantalla con las opciones de impresión:
+
+\begin{center}
+    \includegraphics[width=0.66\columnwidth]{imprimir_not.png}
+\end{center}
+
+Da clic en el botón {\bf{<<Imprimir>>}}.
+
+{\Huge{\color{myblue} \section{ ¿Cómo descargar un acuerdo?}\label{sec:0.4}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Descargar>>}} indicado anteriormente con el número (4), automáticamente se iniciará la descarga en tu equipo de computo.
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{guardar.png}
+\end{center}
+
+{\Huge{\color{myblue} \section{ ¿Cómo consultar la información del acuerdo?}\label{sec:0.55}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Información>>}} indicado anteriormente con el número (5), se mostrará una pantalla con la información del acuerdo.
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{inf_acuerdo.png}
+\end{center}
+
+\begin{itemize}
+    \item Folio acuerdo
+    \item No.juicio
+    \item Observaciones
+    \item Fecha de acuerdo
+    \item Folio de actuación
+    \item Tipo de acuerdo
+\end{itemize}
+
+{\Huge{\color{myblue} \section{ ¿Cómo ver las notificaciones del acuerdo?}\label{sec:0.5}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Notificaciones>>}} indicado anteriormente con el número (6), se desplegarán la información de las notificaciones.
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{noti.png}
+\end{center}
+
+Podemos editar, visualizar, imprimir, descargar y eliminar la notificación con los iconos de acciones.
+
+{\Huge{\color{myblue} \section{ ¿Cómo registrar una notificación?}\label{sec:0.6}}}
+
+Es necesario que previamente se haya realizado la búsqueda de  la notificación deseada \textit{Ver ~\nameref{sec:0.1}}\\
+Da clic sobre el icono de {\bf{<<Notificaciones>>}} indicado anteriormente con el número (7), se mostrará la siguiente pantalla:
+
+\begin{center}
+    \includegraphics[width=0.88\columnwidth]{reg_noti.png}
+\end{center}
+
+Ingresa los siguientes datos:
+
+\begin{enumerate}
+    \item Fecha de elaboración
+    \item Fecha de notificación
+    \item Tipo de notificación
+    \item Notificados
+    \item Archivo (.docx .pdf)
+    \item Observaciones
+\end{enumerate}
+
+Da clic en el botón {\bf{<<Guardar>>}}, se mostrará el siguiente mensaje:
+\begin{center}
+    \includegraphics[width=0.30\columnwidth]{notiguardada.png}
+\end{center}
+\newpage
+\begin{table}[t]
+\begin{center}
+\begin{tabular}{| c | c | c | c | }
+\hline
+
+\multicolumn{4}{ |c| }{\cellcolor[gray]{0.9}CONTROL DE VERSIONES} \\ \hline
+Versión &               Elaborado por:          & Fecha de última modificación          & Motivo \\ \hline
+1.0.1   & Esthefania Vidal Solares        &      12/octubre/2022
+&Creación \\ \hline
+1.0.2   & Esthefania Vidal Solares        &     27/febrero/2023
+&Actualización \\ \hline
+\hline
+\end{tabular}
+\caption{Control de Versiones}
+\label{tab:versiones}
+\end{center}
+\end{table}
+
+
+\end{quote}
+
+\end{document}
+
+
