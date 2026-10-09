@@ -1,7 +1,7 @@
 <template>
   <q-card style="width: 900px; max-width: 950px;">
     <q-card-section class="row items-center">
-      <div class="text-h6 q-ml-sm">{{nombreDocumento}}</div>
+      <div class="text-h6 q-ml-sm">{{titulo}}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
@@ -11,7 +11,18 @@
     <template v-if="!fetchingDocumento && base64">
       <div class="row q-ma-md" v-show="loadedRatio">
         <div class="col-md-4">
-          <input v-model.number="page"
+          <input v-if="paginado"
+            :value="currentPage"
+            min="1"
+            step="1"
+            type="number"
+            class="q-pa-sm"
+            oninput="validity.valid||(value='');"
+            style="width: 5em; text-align:center;"
+            @change="setPageModal"
+          >
+          <input v-else
+            v-model.number="page"
             min="1"
             step="1"
             type="number"
@@ -19,16 +30,16 @@
             oninput="validity.valid||(value='');"
             style="width: 5em; text-align:center;"
           >
-          <span>&nbsp;&nbsp;/&nbsp;&nbsp;{{pageCount}}</span>
+          <span>&nbsp;&nbsp;/&nbsp;&nbsp;{{paginado ? totalPages : pageCount}}</span>
         </div>
 
         <div class="col-md-4" align="center">
           <q-btn icon="arrow_back" flat round
-            @click.prevent="page > 1 ? page-- : 1"
+            @click.prevent="prevPageModal"
           />
 
           <q-btn icon="arrow_forward" flat round
-            @click.prevent="page < pageCount ? page++ : 1"
+            @click.prevent="nextPageModal"
           />
         </div>
 
@@ -46,7 +57,7 @@
           <pdf style="width: 100%; border: 1px solid black;"
             ref="pdf"
             :src="base64Url"
-            :page="page ? page : 1"
+            :page="paginado || !page ? 1 : page"
             @progress="loadedRatio = $event"
             @num-pages="pageCount = $event"
             @loaded="loaded = $event"
@@ -88,7 +99,7 @@
         <q-icon name="error" color="red" style="font-size: 6em;"/>
         <h5>Error</h5>
         <p>No se encuentró el archivo</p>
-        <p v-if="errorB64">{{errorB64}}</p>
+        <p v-if="errorB64Texto">{{errorB64Texto}}</p>
         <p v-if="errorPdf">{{errorPdf}}</p>
       </div>
     </div>
@@ -120,8 +131,14 @@ export default {
       default: '',
     },
     nombreDocumento: {
-      required: true,
+      required: false,
       default: '',
+    },
+    // Si se recibe, el modal pagina contra el servidor (store pagination):
+    // base64 contiene solo la pagina actual y se emite changePage al navegar.
+    documentoId: {
+      required: false,
+      default: undefined,
     },
     fetchingDocumento: {
       required: true,
@@ -149,7 +166,6 @@ export default {
       pageCount: '',
       errorPdf: null,
       loadedRatio: 0,
-      currentPage: '',
       fetching: false,
     };
   },
@@ -158,7 +174,28 @@ export default {
       return `data:application/pdf;base64, ${this.base64}`;
     },
     nombreArchivo() {
-      return this.nombreDocumento.replace(' ', '_');
+      return (this.titulo || '').replace(' ', '_');
+    },
+    paginado() {
+      return this.documentoId !== undefined;
+    },
+    pagination() {
+      return this.$store.getters['pagination/getPagination'];
+    },
+    currentPage() {
+      return this.pagination.currentPage || 1;
+    },
+    totalPages() {
+      return this.pagination.totalPages || 1;
+    },
+    titulo() {
+      return this.paginado ? this.pagination.nombreDocumento : this.nombreDocumento;
+    },
+    errorB64Texto() {
+      if (this.errorB64 && typeof this.errorB64 === 'object') {
+        return this.errorB64.errors || this.errorB64.message || '';
+      }
+      return this.errorB64;
     },
   },
   methods: {
@@ -176,7 +213,49 @@ export default {
       }
       return bytes;
     },
+    emitChangePage() {
+      this.$emit('changePage', {
+        page: this.currentPage,
+        id: this.documentoId,
+        nombreDocumento: this.titulo,
+      });
+    },
+    prevPageModal() {
+      if (!this.paginado) {
+        if (this.page > 1) this.page -= 1;
+        return;
+      }
+      if (this.currentPage > 1) {
+        this.$store.dispatch('pagination/prevPage');
+        this.emitChangePage();
+      }
+    },
+    nextPageModal() {
+      if (!this.paginado) {
+        if (this.page < this.pageCount) this.page += 1;
+        return;
+      }
+      if (this.currentPage < this.totalPages) {
+        this.$store.dispatch('pagination/nextPage');
+        this.emitChangePage();
+      }
+    },
+    setPageModal(event) {
+      const input = event.target;
+      const page = parseInt(input.value, 10);
+      if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+        this.$store.dispatch('pagination/setPage', page);
+        this.emitChangePage();
+      } else {
+        input.value = this.currentPage;
+      }
+    },
     descargarArchivo() {
+      if (this.paginado) {
+        this.$emit('downloadDocumento', { id: this.documentoId, nombrearchivo: this.titulo });
+        return;
+      }
+
       const arrBuffer = this.base64ToArrayBuffer(this.base64);
       const newBlob = new Blob([arrBuffer], { type: 'application/pdf' });
 
@@ -195,6 +274,11 @@ export default {
       link.remove();
     },
     async imprimirArchivo() {
+      if (this.paginado) {
+        this.$emit('imprimir', { id: this.documentoId, nombrearchivo: this.titulo });
+        return;
+      }
+
       try {
         if (this.base64) {
           printJS({ printable: this.base64, type: 'pdf', base64: true });

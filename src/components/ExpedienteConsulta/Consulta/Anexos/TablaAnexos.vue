@@ -74,16 +74,18 @@
       @hide="closeModalPdf"
       v-model="previsualizarPdf"
     >
-      <modal-pdf-paginador
+      <modal-pdf
         v-if="previsualizarPdf"
         :base64="base64"
         :errorB64="errorB64"
         :documentoId="documentoId"
         :fetchingDocumento="fetchingDocumento"
         @changePage="changePage"
+        @downloadDocumento="downloadDocumento"
+        @imprimir="imprimirDocumento"
         @close="closeModalPdf"
       >
-      </modal-pdf-paginador>
+      </modal-pdf>
     </q-dialog>
   </div>
 </template>
@@ -102,7 +104,7 @@ import printJS from 'print-js';
 import errors from 'boot/errors';
 import sidjbridge from 'boot/sidjbridge';
 
-import { ModalPdfPaginador } from '@tjacdmx/sidj-components';
+import ModalPdf from 'components/Generales/ModalPdf';
 
 export default {
   name: 'tabla-anexos',
@@ -183,7 +185,7 @@ export default {
     QTd,
     QTr,
     QTable,
-    ModalPdfPaginador,
+    ModalPdf,
   },
   computed: {
     anexosSort() {
